@@ -40,9 +40,54 @@
 
 **项目结构**:
 
-```text
+```
 ai_agent_project/
 ├── main.py      # 主程序：聊天循环 + 工具调用协调
 ├── tools.py     # 工具库：函数定义 + Schema + 映射表
 ├── config.py    # 配置管理：API Key + 模型参数
 └── .env         # 环境变量（敏感信息）
+```
+
+**下一步方向** (Day 8):
+- 🧘 缓冲日：复盘 Day 1-7 的学习成果
+- 开始 LeetCode "两数之和"，熟悉 Python 基础数据结构操作
+
+### 📊 Day 9 成果总结
+**项目名称**: `day09_typing.py` - Type Hints (类型提示) 实战练习
+
+**核心学习内容**:
+- ✅ **基础类型提示**:
+  - 参数类型：`name: str`, `age: int`
+  - 返回值类型：`-> str`, `-> float`, `-> None`
+  - 理解了类型提示的基本语法：`参数名: 类型`, `-> 返回类型`
+- ✅ **集合类型提示**:
+  - `List[int]`: 整数列表类型
+  - `Dict[str, Any]`: 字典类型（键为字符串，值为任意类型）
+  - 掌握了 `typing` 模块的导入：`from typing import List, Dict, Optional, Any`
+- ✅ **Optional 类型 (可选类型)**:
+  - `Optional[int]`: 可以是 int 或 None
+  - `Optional[str] = None`: 默认值为 None 的可选字符串参数
+  - 理解了可选参数的实际应用场景（如默认参数、过滤条件）
+- ✅ **复杂嵌套类型**:
+  - `List[Dict[str, Any]]`: 列表中的每个元素都是字典
+  - 掌握了多层嵌套类型的表示方法
+- ✅ **实际应用场景**:
+  - 学生信息处理：`get_student_info(name: str, scores: List[int]) -> Dict[str, Any]`
+  - 待办事项过滤：`process_todos(todos: List[Dict[str, Any]], ...) -> List[str]`
+  - 数据库查询：`search_db(query: str, limit: Optional[int] = 10) -> None`
+
+**技术亮点**:
+- 理解了**类型提示的作用**：提高代码可读性，帮助 IDE 智能提示，提前发现类型错误
+- 掌握了**集合类型的表示方法**：用 `List[...]` 和 `Dict[...]` 表示复杂数据结构
+- 学会了**Optional 的使用场景**：处理可能为 None 的参数和返回值
+- 理解了**Python 与静态类型语言的区别**：类型提示是"提示"而非强制，运行时不会检查
+
+**代码质量提升**:
+- 代码可读性大幅提升：通过类型提示，一眼就能看出函数需要什么参数、返回什么类型
+- 为后续学习 Pydantic（Day 10）打下基础：Pydantic 会利用类型提示进行数据验证
+- 符合现代 Python 开发规范：Python 3.5+ 推荐使用类型提示
+
+**关键概念掌握**:
+- **`/` vs `//` 的区别**：`/` 返回浮点数，`//` 返回整数（在 `calculate_average` 函数中的理解）
+- **字典访问方式**：使用方括号 `item["key"]` 访问字典值
+- **类型提示的层次**：从简单类型 (`str`, `int`) → 集合类型 (`List`, `Dict`) → 可选类型 (`Optional`)
