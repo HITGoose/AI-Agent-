@@ -47,4 +47,12 @@ def translate_api(req: TranslationRequest):
     except Exception as e:
         return {"error": str(e)}
 
+if __name__ == "__main__":
+    import uvicorn
+    print("🚀 服务正在启动...")
+    print("📱 请在局域网内访问: http://192.168.31.249:8000/docs")
+    # host="0.0.0.0" 是关键！它允许局域网内的其他设备（手机）连接
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 # 运行提示: uvicorn day14_final_api:app --reload
+
+#翻译官系统完结！
