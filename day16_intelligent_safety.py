@@ -31,7 +31,7 @@ def analyze_text(text: str):
 # --- 测试环节 ---
 if __name__ == "__main__":
     # 这是一个没有固定格式的句子，正则搞不定的
-    test_input = "JiaYi Ouyang lives in Kuala Lumpur. His email is oj@monash.edu."
+    test_input = "HITGoose lives in Kuala Lumpur. His email is oj@monash.edu."
     
     analyze_text(test_input)
     
