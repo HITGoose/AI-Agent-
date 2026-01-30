@@ -7,7 +7,7 @@ load_dotenv()
 #获取 Key
 API_KEY = os.getenv("DEEPSEEK_API_KEY")
 BASE_URL = "https://api.deepseek.com"
-
+APP_MODE = os.getenv("APP_MODE")
 #定义一些常量 (用大写字母表示常量，这是规范)
 MODEL_NAME = "deepseek-chat"
 TEMPERATURE = 1.3 

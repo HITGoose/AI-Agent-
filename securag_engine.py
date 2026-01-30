@@ -16,12 +16,22 @@ class SecuRAG:
         初始化 SecuRAG 引擎：加载安全模型、数据库和 API 客户端
         """
         print("🚀 正在启动 SecuRAG 引擎...")
-        
+        self.mode = config.APP_MODE  # 或者 "cloud"
+        if self.mode == "local":
+            print("💻 模式: 本地隐私模式 (Ollama/DeepSeek)")
+            print("🔒 数据主权已激活：0 数据出网")
+            self.client = OpenAI(
+                base_url="http://localhost:11434/v1", # Ollama 的本地地址
+                api_key="ollama", # 本地模式不需要 key，但必须填个占位符
+            )
+            self.model_name = "deepseek-r1" # 刚才你下载的模型名字
+        else:
         # 1. 初始化 AI 客户端 (大脑)
-        self.client = OpenAI(
-            api_key=os.getenv("DEEPSEEK_API_KEY"),
-            base_url="https://api.deepseek.com"
-        )
+            print("☁️ 模式: 云端高智商模式")
+            self.client = OpenAI(
+                api_key=os.getenv("DEEPSEEK_API_KEY"),
+                base_url="https://api.deepseek.com"
+            )
         
         # 2. 初始化安全检测器 (Presidio - 智能安检员)
         print("🛡️ 加载安全组件...")
@@ -101,33 +111,38 @@ class SecuRAG:
         print("🔍 正在检索知识库...")
         results = self.collection.query(
             query_texts=[safe_query],
-            n_results=1 # 只找最相关的一条
+            n_results=3 # 只找最相关的一条
         )
         
         # 检查有没有找到知识
-        if not results['documents'][0]:
+        if not results['documents'][0] or not results['documents']:
             context = "没有找到相关背景知识。"
         else:
-            context = results['documents'][0][0]
-            print(f"📖 找到背景知识: {context}")
+            context = "\n\n".join(results['documents'][0])
+            print(f"📖 找到背景知识片段数: {len(results['documents'][0])}")
             
         # --- Step 3: 生成 (Generation) ---
         # 组装 Prompt
         system_prompt = config.SYSTEM_PROMPT.format(context=context)
         
         print("🤖 AI 正在思考...")
-        response = self.client.chat.completions.create(
-            model="deepseek-chat", # 或者你 .env 里配置的模型
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": safe_query}
-            ],
-            temperature=0.1
-        )
-        
-        answer = response.choices[0].message.content
-        print(f"💬 AI 回答:\n{answer}")
-        return answer
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model_name, # 或者你 .env 里配置的模型
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": safe_query}
+                ],
+                temperature=0.1
+            )
+            
+            answer = response.choices[0].message.content
+            print(f"💬 AI 回答:\n{answer}")
+            return answer
+
+        except Exception as e:
+            print(f"❌ 调用失败: {e}")
+            return "抱歉，系统遇到了一些问题。"
 
 # --- 测试代码 ---
 if __name__ == "__main__":
