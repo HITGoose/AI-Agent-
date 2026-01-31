@@ -5,6 +5,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from presidio_analyzer import AnalyzerEngine
 import config
+import httpx
 from security_guard import SecurityGuard 
 
 # 加载环境变量 (API Key)
@@ -23,6 +24,7 @@ class SecuRAG:
             self.client = OpenAI(
                 base_url="http://localhost:11434/v1", # Ollama 的本地地址
                 api_key="ollama", # 本地模式不需要 key，但必须填个占位符
+                http_client=httpx.Client(trust_env=False)
             )
             self.model_name = "deepseek-r1" # 刚才你下载的模型名字
         else:

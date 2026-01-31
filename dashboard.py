@@ -3,6 +3,8 @@ import os
 import time
 from securag_engine import SecuRAG
 from pdf_loader import load_pdf_to_chroma # 👈 复用我们昨天写的加载器
+#前端页面展示 streamlit 缺点是每次都会从头跑一次代码到结尾
+
 
 # --- 1. 页面配置 (Page Config) ---
 st.set_page_config(
@@ -17,6 +19,7 @@ st.markdown("### Powered by Local Privacy & Hybrid Sanitization")
 # --- 2. 初始化引擎 (Session State) ---
 # Streamlit 每次点击都会刷新代码，所以要用 session_state 记住“机器人”
 # 否则每问一句话它都要重启一次，太慢了
+# session_state 是streamlit提供的用来存储的字典，但关闭网页就会清除之前的数据，相当于临时栈
 if "bot" not in st.session_state:
     with st.spinner("正在启动安全引擎..."):
         st.session_state.bot = SecuRAG()
