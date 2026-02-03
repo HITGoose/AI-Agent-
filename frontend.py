@@ -1,10 +1,16 @@
 import streamlit as st
 import requests  # 👈 关键：我们不再 import 引擎，而是 import 网络请求库
 import json
+import uuid
 
 # --- 配置 ---
 API_URL = "http://localhost:8000/chat"  # 指向刚才启动的 api_server.py
 
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
+    print(f"🆕 新用户进店，分配 ID: {st.session_state.session_id}")
+
+st.caption(f"当前会话 ID: {st.session_state.session_id}")
 st.set_page_config(page_title="SecuRAG Client", page_icon="🛡️")
 
 st.title("🛡️ SecuRAG (Client Mode)")
@@ -17,7 +23,7 @@ with st.sidebar:
         try:
             # 发一个简单的测试请求（这里没写专门的心跳接口，直接试错）
             # 实际开发通常会有 /health 接口
-            st.success("API 服务在线！✅")
+            st.success("API 服务在线！")
         except:
             st.error("无法连接 API 服务器 ❌")
             st.info("请确认 api_server.py 是否在运行")
@@ -65,7 +71,7 @@ if prompt := st.chat_input("请输入您的问题..."):
         
         try:
             # 🌟 核心时刻：发送 HTTP POST 请求 🌟
-            payload = {"query": prompt}
+            payload = {"query": prompt, "session_id": st.session_state.session_id}
             response = requests.post(API_URL, json=payload)
             
             if response.status_code == 200:
