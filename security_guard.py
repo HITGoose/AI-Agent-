@@ -5,6 +5,7 @@ class SecurityGuard:
     def __init__(self):
         # 🚫 黑名单：任何包含这些意图的词都会被拦截
         # 这种基于规则的拦截叫 "Deterministic Guardrails" (确定性护栏)
+        print("🛡️ 加载安全组件...")
         self.analyzer = AnalyzerEngine()
         self.injection_patterns = [
             r"ignore all previous instructions",

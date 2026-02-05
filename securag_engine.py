@@ -203,10 +203,11 @@ class SecuRAG:
             print(f"⚠️ 意图判断失败: {e} -> 默认走 SEARCH")
             return "SEARCH" # 所有的失败都默认去查库，比较安全
     
-    def chat(self, user_query: str, session_id: str = "default"):
+    def chat(self, user_query: str, session_id: str = "default", temperature: float = 0.1):
         """
         核心流程：提问 -> 清洗 -> 检索 -> 生成
         """
+        print(f"🧠 [Engine] 收到请求，创造力 Temperature set to: {temperature}")
         print(f"\n👤 用户({session_id})提问: {user_query}")
         # 1.获取用户的历史记录（如果没有就初始化为空列表）
         if session_id not in self.sessions:
