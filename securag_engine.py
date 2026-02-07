@@ -21,8 +21,10 @@ class SecuRAG:
         if self.mode == "local":
             print("💻 模式: 本地隐私模式 (Ollama/DeepSeek)")
             print("🔒 数据主权已激活：0 数据出网")
+            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+            print(f"🔌 [Engine] 正在连接 Ollama 地址: {ollama_host}") # 打印出来让你放心
             self.client = OpenAI(
-                base_url="http://localhost:11434/v1", # Ollama 的本地地址
+                base_url=f"{ollama_host}/v1", # Ollama 的本地地址
                 api_key="ollama", # 本地模式不需要 key，但必须填个占位符
                 http_client=httpx.Client(trust_env=False)
             )

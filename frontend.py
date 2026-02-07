@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import uuid
 import time # 用来模拟一点点延迟，让动画更好看
+import os
 
 # --- 1. 页面基本配置 ---
 st.set_page_config(
@@ -12,7 +13,9 @@ st.set_page_config(
 )
 
 # 配置后端 API 地址
-BASE_URL = "http://127.0.0.1:8000"
+
+DEFAULT_API_URL = "http://127.0.0.1:8000"
+BASE_URL = os.getenv("API_BASE_URL", DEFAULT_API_URL)
 API_URL = f"{BASE_URL}/chat"
 
 # --- 2. 初始化会话 ---

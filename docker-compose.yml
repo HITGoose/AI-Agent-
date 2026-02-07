@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # --- 服务 1: 后端 API ---
+  backend:
+    build: .
+    container_name: securag_backend
+    command: uvicorn api_server:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data               # 挂载数据目录
+      - ./my_local_db:/app/my_local_db # 挂载向量库，保证数据持久化
+    environment:
+      # ✅ 回归官方推荐地址 (刚才测试状态码 200 的那个！)
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      
+      # 🛡️ 强制绕过代理 (把 host.docker.internal 加入白名单)
+      - NO_PROXY=localhost,127.0.0.1,host.docker.internal
+      - no_proxy=localhost,127.0.0.1,host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Linux/Windows 兼容性配置
+
+  # --- 服务 2: 前端 UI ---
+  frontend:
+    build: .
+    container_name: securag_frontend
+    command: python -m streamlit run frontend.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      # 告诉前端，后端在哪 (容器内部网络互联)
+      - API_BASE_URL=http://backend:8000 
+    depends_on:
+      - backend # 只有后端启动了，前端才启动
