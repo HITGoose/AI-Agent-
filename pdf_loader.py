@@ -45,6 +45,6 @@ def load_pdf_to_chroma(pdf_path):
 
 if __name__ == "__main__":
     # 这里填你刚才放入 data 文件夹的文件名
-    pdf_file = "./data/test.pdf" 
+    pdf_file = "./data/2005.11401v4.pdf" 
     
     load_pdf_to_chroma(pdf_file)
